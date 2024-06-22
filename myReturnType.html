@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch User Data</title>
+</head>
+<body>
+    <input type="text" id="userId" placeholder="Enter User ID">
+    <button onclick="displayData()">Fetch User Data</button>
+    <div id="userData"></div>
+
+    <script>
+        // The compiled JavaScript code from fetchData.ts
+        function fetchData() {
+            const userId = (document.getElementById('userId')).value;
+            return new Promise((resolve, reject) => {
+                let req = new XMLHttpRequest();
+                req.open('GET', `https://jsonplaceholder.typicode.com/users/${userId}`);
+                req.onload = function () {
+                    if (req.status == 200) {
+                        resolve(req.response);
+                    } else {
+                        reject("User not found");
+                    }
+                };
+                req.onerror = function () {
+                    reject("Error fetching data");
+                };
+                req.send();
+            });
+        }
+
+        function displayData() {
+            fetchData().then((data) => {
+                document.getElementById('userData').textContent = data;
+            }).catch((error) => {
+                document.getElementById('userData').textContent = error;
+            });
+        }
+    </script>
+</body>
+</html>
